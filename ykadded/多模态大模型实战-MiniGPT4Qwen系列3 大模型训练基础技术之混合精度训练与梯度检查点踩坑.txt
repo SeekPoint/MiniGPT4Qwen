@@ -1,0 +1,8 @@
+多模态大模型实战-MiniGPT4Qwen系列3：大模型训练基础技术之混合精度训练与梯度检查点踩坑
+https://zhuanlan.zhihu.com/p/671165275
+
+多模态大模型实战-MiniGPT4Qwen系列1：3090+2小时+通义千问=个人版双语多模态大模型
+https://zhuanlan.zhihu.com/p/664612306
+
+多模态大模型实战-MiniGPT4Qwen系列2：回到世界原点-基于lavis和registry机制搭建更加灵活的Trainer
+https://zhuanlan.zhihu.com/p/670572461

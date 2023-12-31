@@ -30,7 +30,7 @@ from transformers import BertTokenizer
 class Blip2Base(BaseModel):
     @classmethod
     def init_tokenizer(cls, truncation_side="right"):
-        ckpt_path = os.path.join(registry.get_path('cache_root'),'ckpt/bert-base-uncased')
+        ckpt_path = os.path.join(registry.get_path('cache_root'),'/data/hf_model/bert-base-uncased')
         tokenizer = BertTokenizer.from_pretrained(ckpt_path, truncation_side=truncation_side)
         tokenizer.add_special_tokens({"bos_token": "[DEC]"})
         print('Finishing Initializing Tokenizer...')
@@ -48,7 +48,7 @@ class Blip2Base(BaseModel):
 
     @classmethod
     def init_Qformer(cls, num_query_token, vision_width, cross_attention_freq=2):
-        ckpt_path = os.path.join(registry.get_path('cache_root'),'ckpt/bert-base-uncased')
+        ckpt_path = os.path.join(registry.get_path('cache_root'),'/data/hf_model/bert-base-uncased')
         encoder_config = BertConfig.from_pretrained(ckpt_path)
         print('Finishing Loading Q-former Initializing Config...')
         encoder_config.encoder_width = vision_width

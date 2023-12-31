@@ -1,0 +1,2 @@
+多模态大模型实战-DeepSpeed x MiniGPT4Qwen：戴上DeepSpeed之翼（附DeepSpeed Tutorials）
+https://zhuanlan.zhihu.com/p/673359684

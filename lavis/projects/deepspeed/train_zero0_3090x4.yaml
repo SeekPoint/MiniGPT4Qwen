@@ -102,7 +102,7 @@ run:
     dump_state: False
 
     fp16:
-        enabled: False
+        enabled: True
         loss_scale: 0
         loss_scale_window: 1000
         initial_scale_power: 16
@@ -110,7 +110,7 @@ run:
         min_loss_scale: 1
 
     bf16:
-        enabled: True
+        enabled: False
 
     optimizer:
         type: "AdamW"

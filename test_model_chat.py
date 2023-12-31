@@ -11,7 +11,7 @@ from transformers.generation import GenerationConfig
 device = 'cuda'
 load_model_and_preprocess = partial(load_model_and_preprocess,is_eval=True,device=device)
 
-ckpt_path = 'lavis/output/instruction_tuning/lr1e-4/20231024110/checkpoint_9.pth'
+ckpt_path = '/data/ckpt/20231024110/checkpoint_9.pth'
 
 img_path = 'examples/minigpt4_image_3.jpg'
 image = Image.open(img_path).convert('RGB')

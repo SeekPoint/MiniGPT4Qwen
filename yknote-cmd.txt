@@ -1,0 +1,72 @@
+
+root@MZ32-00:/ds/MiniGPT4Qwen# python test_model_chat.py
+[real_accelerator.py:150:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+Finishing Initializing Vision-Encoder...
+Finishing Loading Q-former Initializing Config...
+Finishing Initializing Q-former...
+Loading LLM:/ds/MiniGPT4Qwen/lavis/../cache/ckpt/Qwen7B-chat...
+WARNING:transformers_modules.Qwen7B-chat.modeling_qwen:The model is automatically converting to fp16 for faster inference. If you want to disable the automatic precision, please manually add bf16/fp16/fp32=True to "AutoModelForCausalLM.from_pretrained".
+WARNING:transformers_modules.Qwen7B-chat.modeling_qwen:Try importing flash-attention for faster inference...
+WARNING:transformers_modules.Qwen7B-chat.modeling_qwen:Warning: import flash_attn rotary fail, please install FlashAttention rotary to get higher efficiency https://github.com/Dao-AILab/flash-attention/tree/main/csrc/rotary
+WARNING:transformers_modules.Qwen7B-chat.modeling_qwen:Warning: import flash_attn rms_norm fail, please install FlashAttention layer_norm to get higher efficiency https://github.com/Dao-AILab/flash-attention/tree/main/csrc/layer_norm
+WARNING:transformers_modules.Qwen7B-chat.modeling_qwen:Warning: import flash_attn fail, please install FlashAttention to get higher efficiency https://github.com/Dao-AILab/flash-attention
+Loading checkpoint shards: 100%|████████████████████████████████████████████████████████████████████████████████████████████| 8/8 [00:06<00:00,  1.23it/s]
+Start loading pretrained model: /ds/MiniGPT4Qwen/lavis/../cache/ckpt/blip2/blip2_pretrained_flant5xxl.pth
+Loading the File Named: /ds/MiniGPT4Qwen/lavis/../cache/ckpt/blip2/blip2_pretrained_flant5xxl.pth...
+Yes.
+========================================
+[('<Img><ImageHere></Img> Describe this image in detail.', 'This image shows a kitchen with white cabinets, black countertops, and stainless steel appliances. The floor is made of black and white tiles. There is a refrigerator, stove, and dishwasher in the kitchen. The walls are painted white and there is a window above the sink. The room is well lit and has a lot of natural light coming in through the window.'), ('Is there a refrigerator in the picture? Answer yes or no.', 'Yes.')]
+root@MZ32-00:/ds/MiniGPT4Qwen#
+
+
+
+
+
+CUDA_VISIBLE_DEVICES=0,1,2 python -m torch.distributed.run --nproc_per_node=3 train.py --cfg-path lavis/projects/instruction_tuning/train.yaml
+====================================
+  File "/ds/MiniGPT4Qwen/lavis/tasks/base_task.py", line 200, in _train_inner_loop
+    with torch.cuda.amp.autocast(enabled=use_amp,dtype=torch.bfloat16 if autocast_dtype == 'bf16' else torch.float16):
+  File "/home/amd00/anaconda3/envs/minigpt4qwen/lib/python3.8/site-packages/torch/cuda/amp/autocast_mode.py", line 25, in __init__
+    super().__init__("cuda", enabled=enabled, dtype=dtype, cache_enabled=cache_enabled)
+  File "/home/amd00/anaconda3/envs/minigpt4qwen/lib/python3.8/site-packages/torch/amp/autocast_mode.py", line 234, in __init__
+    raise RuntimeError('Current CUDA Device does not support bfloat16. Please switch dtype to float16.')
+RuntimeError: Current CUDA Device does not support bfloat16. Please switch dtype to float16.
+Exception in thread Thread-2ERROR:torch.distributed.elastic.multiprocessing.api:failed (exitcode: 1)
+====解决 ac_dt = 'fp16'  # for 2080ti, force it to fp16  yknote   对于非deepspeed
+
+
+deepspeed配置中可以选择fp16
+
+CUDA_VISIBLE_DEVICES=0,1,2 python -m torch.distributed.run --nproc_per_node=3 train.py --cfg-path lavis/projects/deepspeed/train_zero2_3090x4.yaml --use-deepspeed
+
+
+ 2002  conda create -n minigpt4qwen python=3.8
+ 2003  conda activate minigpt4qwen
+ 2004  cd /ds/MiniGPT4Qwen/
+ 2005  vim requirements.txt
+ 2006  pip install -e .
+
+  788  cp instruction_data/llava_minigpt4qwen_format.json /ds/MiniGPT4Qwen/cache/dataset/minigpt4/
+  789  cp instruction_data/llava_minigpt4qwen_format.json /ds/MiniGPT4Qwen/cache/dataset/llava/
+
+  726  ln -s /data/hf_model/bert-base-uncased bert-base-uncased
+  732  ln -s /data/hf_model/blip2_pretrained_flant5xxl.pth blip2_pretrained_flant5xxl.pth
+  740  ln -s /data/hf_model/eva_vit_g.pth eva_vit_g.pth
+  742  ln -s /data/hf_model/Qwen-7B-Chat Qwen7B-chat
+
+
+root@MZ32-00:/ds/MiniGPT4Qwen# cd cache/
+root@MZ32-00:/ds/MiniGPT4Qwen/cache# tree
+.
+├── ckpt
+│   ├── bert-base-uncased -> /data/hf_model/bert-base-uncased
+│   ├── blip2
+│   │   └── blip2_pretrained_flant5xxl.pth -> /data/hf_model/blip2_pretrained_flant5xxl.pth
+│   ├── eval
+│   │   └── eva_vit_g.pth -> /data/hf_model/eva_vit_g.pth
+│   └── Qwen7B-chat -> /data/hf_model/Qwen-7B-Chat
+└── dataset -> /data/hf_model/minigpt4_training_for_MMPretrain
+
+6 directories, 2 files
+root@MZ32-00:/ds/MiniGPT4Qwen/cache#
+

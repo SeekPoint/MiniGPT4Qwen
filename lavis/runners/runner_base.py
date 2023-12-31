@@ -193,6 +193,8 @@ class RunnerBase:
     @property
     def autocast_dtype(self):
         ac_dt = self.config.run_cfg.get('autocast_dtype',"fp16")
+        print(f"ac_dt={ac_dt}")
+        ac_dt = 'fp16'  # for 2080ti, force it to fp16  yknote
         assert ac_dt in ['bf16','fp16'], 'please set it in ["bf16","fp16"]'
         return ac_dt
 

@@ -443,8 +443,8 @@ def create_eva_vit_g(img_size=224,drop_path_rate=0.4,use_checkpoint=False,precis
         use_checkpoint=use_checkpoint,
     )
     import os
-    if os.path.isfile(os.path.join(registry.get_path('cache_root'),'ckpt/eva/eva_vit_g.pth')):
-        cached_file = os.path.join(registry.get_path('cache_root'),'ckpt/eva/eva_vit_g.pth')
+    if os.path.isfile(os.path.join(registry.get_path('cache_root'),'ckpt/eval/eva_vit_g.pth')):
+        cached_file = os.path.join(registry.get_path('cache_root'),'ckpt/eval/eva_vit_g.pth')
     else:
         url = "https://storage.googleapis.com/sfr-vision-language-research/LAVIS/models/BLIP2/eva_vit_g.pth"
         cached_file = download_cached_file(

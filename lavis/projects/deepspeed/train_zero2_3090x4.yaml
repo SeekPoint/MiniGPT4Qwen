@@ -36,7 +36,7 @@ model:
   lora_dropout: 0.05
 
   # text length when training
-  max_txt_len: 256
+  max_txt_len: 128
 
   # enable autocast of vit
   enable_autocast: False
@@ -70,7 +70,7 @@ run:
   min_lr: 1e-6
   warmup_lr: 0
   warmup_steps: 500
-  max_epoch: 10
+  max_epoch: 2
   batch_size_train: 2
   batch_size_eval: 1
   num_workers: 4
@@ -88,13 +88,13 @@ run:
   # valid_splits: ["val"]
   # test_splits: ["test"]
 
-  world_size: 1
+  world_size: 3
   dist_url: "env://"
   distributed: True
 
   deepspeed_config:
     gradient_accumulation_steps: 16
-    train_micro_batch_size_per_gpu: 2
+    train_micro_batch_size_per_gpu: 1
 
     gradient_clipping: 1.
     steps_per_print: 128
@@ -102,7 +102,7 @@ run:
     dump_state: False
 
     fp16:
-        enabled: False
+        enabled: True
         loss_scale: 0
         loss_scale_window: 1000
         initial_scale_power: 16
@@ -110,7 +110,7 @@ run:
         min_loss_scale: 1
 
     bf16:
-        enabled: True
+        enabled: False
 
     optimizer:
         type: "AdamW"
